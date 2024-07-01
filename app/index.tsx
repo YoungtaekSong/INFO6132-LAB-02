@@ -12,12 +12,14 @@ import {
 } from "react-native";
 
 import {
+  useEffect,
   useState
 } from "react";
 
 import { Ionicons } from '@expo/vector-icons';
 import uuid from 'react-native-uuid';
 import Header from '../components/Header';
+import * as database from '../database';
 
 interface TaskData {
   id: string,
@@ -27,15 +29,17 @@ interface TaskData {
 
 export default function App() {
 
-  const [todoList, setTodoList] = useState<TaskData[]>(
-    [
-      { id: String(uuid.v4()), desc: "Do quiz1", status: false },
-      { id: String(uuid.v4()), desc: "Do lab1", status: false },
-    ]
-  )
+  const [todoList, setTodoList] = useState<TaskData[]>([])
   const [todoDesc, setTodoDesc] = useState('')
   const [todoStatus, setTodoStatus] = useState(false)
   const [disabledAddButton, setDisabledAddButton] = useState(true)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setTodoList(await database.readAll());
+    }
+    fetchData();
+  }, []);
 
   const addTask = async () => {
     console.log("* add item : " + todoDesc)
