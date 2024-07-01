@@ -17,7 +17,6 @@ import {
 } from "react";
 
 import { Ionicons } from '@expo/vector-icons';
-import uuid from 'react-native-uuid';
 import Header from '../components/Header';
 import * as database from '../database';
 
@@ -34,6 +33,7 @@ export default function App() {
   const [todoStatus, setTodoStatus] = useState(false)
   const [disabledAddButton, setDisabledAddButton] = useState(true)
 
+  // reload all data from firestore
   useEffect(() => {
     const fetchData = async () => {
       setTodoList(await database.readAll());
@@ -61,9 +61,14 @@ export default function App() {
       return
     }
 
-    const newTodoList = [...todoList]
-    newTodoList.push({ id: String(uuid.v4()), desc: todoDesc, status: todoStatus })
-    setTodoList(newTodoList)
+    // insert data into firestore
+    await database.insert({
+      desc: todoDesc,
+      status: todoStatus
+    })
+
+    // reload all data from firestore
+    setTodoList(await database.readAll());
   }
 
   const onChangeTextDesc = async (desc: any) => {

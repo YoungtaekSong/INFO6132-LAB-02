@@ -1,4 +1,5 @@
 import {
+    addDoc,
     collection,
     getDocs
 } from 'firebase/firestore';
@@ -20,4 +21,16 @@ export async function readAll() {
     console.log(data);
 
     return data;
+}
+
+export async function insert(data) {
+    console.log('Saving...');
+    if (data != undefined) {
+        try {
+            const dbCollection = collection(firebaseDB, "Todo");
+            await addDoc(dbCollection, data);
+        } catch (e) {
+            console.error("Error adding document: ", e);
+        }
+    }
 }
