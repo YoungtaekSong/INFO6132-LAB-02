@@ -1,7 +1,10 @@
 import {
     addDoc,
     collection,
-    getDocs
+    deleteDoc,
+    doc,
+    getDocs,
+    updateDoc
 } from 'firebase/firestore';
 import { firebaseDB } from './config';
 
@@ -31,6 +34,30 @@ export async function insert(data) {
             await addDoc(dbCollection, data);
         } catch (e) {
             console.error("Error adding document: ", e);
+        }
+    }
+}
+
+export async function update(id, data) {
+    console.log('Updating...');
+    if (data != undefined) {
+        try {
+            const dbDoc = doc(firebaseDB, "Todo", id);
+            await updateDoc(dbDoc, data);
+        } catch (e) {
+            console.error("Error deleting document: ", e);
+        }
+    }
+}
+
+export async function remove(id) {
+    console.log('Removing...');
+    if (id != undefined) {
+        try {
+            const dbDoc = doc(firebaseDB, "Todo", id);
+            await deleteDoc(dbDoc);
+        } catch (e) {
+            console.error("Error deleting document: ", e);
         }
     }
 }

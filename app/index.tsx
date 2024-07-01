@@ -80,16 +80,16 @@ export default function App() {
 
     const deleteItem = async () => {
       console.log("* delete item: " + item.id)
-      const newTodoList: TaskData[] = [];
-      todoList.filter(t => t.id != item.id).map((t) => { newTodoList.push(t) })
-      setTodoList(newTodoList)
+      // remove data from firestore
+      await database.remove(item.id)
+      setTodoList(await database.readAll());
     }
 
     const changeStatus = async () => {
       console.log("* change status: " + item.id)
-      const newTodoList: TaskData[] = [];
-      todoList.map((t) => { if (t.id == item.id) { t.status = !t.status } newTodoList.push(t) })
-      setTodoList(newTodoList)
+      // update data in firestore
+      await database.update(item.id, { desc: item.desc, status: !item.status })
+      setTodoList(await database.readAll());
     }
 
     return (
