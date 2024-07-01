@@ -14,14 +14,11 @@ export async function readAll() {
     const querySnapshot = await getDocs(collection(firebaseDB, "Todo"));
 
     querySnapshot.forEach((doc) => {
-        console.log(doc.id, doc.data());
         data.push({
             ...doc.data(),
             id: doc.id,
         })
     })
-
-    console.log(data);
 
     return data;
 }

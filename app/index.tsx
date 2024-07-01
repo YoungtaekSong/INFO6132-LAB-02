@@ -42,7 +42,6 @@ export default function App() {
   }, []);
 
   const addTask = async () => {
-    console.log("* add item : " + todoDesc)
 
     if (todoDesc == "") {
       console.log("is blank")
@@ -50,8 +49,8 @@ export default function App() {
       return
     }
 
+    // check duplication
     var duplicateFlag: Boolean = false
-
     todoList.map((t) => {
       if (t.desc == todoDesc) { duplicateFlag = true; return; }
     })
@@ -61,11 +60,10 @@ export default function App() {
       return
     }
 
+    console.log("* add item : " + todoDesc)
+
     // insert data into firestore
-    await database.insert({
-      desc: todoDesc,
-      status: todoStatus
-    })
+    await database.insert({ desc: todoDesc, status: todoStatus })
 
     // reload all data from firestore
     setTodoList(await database.readAll());
@@ -94,7 +92,7 @@ export default function App() {
 
     return (
       <View style={styles.taskContainer}>
-        <Text style={styles.taskId}>{item.id} </Text>
+        <Text style={styles.taskId}>ID: {item.id} </Text>
         <Text style={item.status ? styles.taskDescDone : styles.taskDesc}>{item.desc}</Text>
         <View style={styles.taskFunctionContainer}>
           <TouchableOpacity onPress={deleteItem}>
@@ -203,6 +201,7 @@ const styles = StyleSheet.create({
   },
   taskId: {
     fontSize: 10,
+    color: "gray"
   },
   taskDesc: {
     fontSize: 20,

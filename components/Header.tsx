@@ -9,6 +9,7 @@ const Header: React.FC<Props> = ({ title }) => {
     return (
         <View style={styles.header}>
             <Text style={styles.headerText}>{title}</Text>
+            <Text></Text>
         </View>
     );
 };
